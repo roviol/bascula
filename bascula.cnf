@@ -1,0 +1,6 @@
+# my.cnf
+[client]
+database = bascula
+user = bascula
+password = bascula
+default-character-set = utf8

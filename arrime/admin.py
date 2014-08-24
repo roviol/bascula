@@ -4,7 +4,7 @@ from arrime.models import Recepcion
 class RecepcionAdmin(admin.ModelAdmin):
 
     def linkreporte(self, obj):
-        return u'<a href="/reportearrime/{1}">Imprimir</a>'.format(obj,obj.id)
+        return u'<a href="/bascula/reportearrime/{1}">Imprimir</a>'.format(obj,obj.id)
     linkreporte.allow_tags = True
     linkreporte.verbose_name = 'Reporte'
 
