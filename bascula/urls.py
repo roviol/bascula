@@ -14,4 +14,6 @@ urlpatterns = patterns('',
     url(r'^operador/', include(operador_site.urls)),
     url(r'^export/(?P<arrime_id>\d+)', 'arrime.views.export_as_json', name='export'),
     url(r'^reportearrime/(?P<arrime_id>\d+)', 'arrime.views.reportearrime', name='reportearrime'),
+    url(r'^general/', include('general.urls')),
+ 
 )
