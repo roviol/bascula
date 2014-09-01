@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, url
 
-from control import views
+from general import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^citas$', views.citas, name='citas')
+    url(r'^recepciones$', views.recepciones, name='recepciones')
 )
 

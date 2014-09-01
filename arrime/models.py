@@ -6,4 +6,3 @@ class Recepcion(general.models.Transaccion):
     class Meta:
         verbose_name = "Recepcion"
         verbose_name_plural = "Recepciones"
-

@@ -16,14 +16,12 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
-#def recepciones(request):
-#    citas = Cita.objects.order_by('-planinicio')
-#    citasp = []
-#    for item in citas:
-#        inicio=item.planinicio.strftime("%Y-%m-%dT%H:%M:%S")
-#        fin=item.planfin.strftime("%Y-%m-%dT%H:%M:%S")
-#        descripcion = item.descripcion+"\n"+item.cliente.nombre+ "\n"+ item.participan()
-#        citasp.append({'title': descripcion,'start': inicio,'end': fin, 'url': '../admin/control/cita/'+str(item.id)})
-#    data = json.dumps(citasp)
-#    return HttpResponse(data, content_type="application/json")
-
+def recepciones(request):
+    recepciones = Recepcion.objects.order_by('-fecha')
+    recepcionesp = []
+    for item in recepciones:
+        inicio=item.fecha.strftime("%Y-%m-%dT%H:%M:%S")
+        descripcion = item.ubicacion.nombre
+        recepcionesp.append({'title': descripcion,'start': inicio,'url': '../admin/arrime/recepcion/'+str(item.id)})
+    data = json.dumps(recepcionesp)
+    return HttpResponse(data, content_type="application/json")
