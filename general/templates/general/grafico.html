@@ -1,0 +1,70 @@
+{% load staticfiles %}
+<meta charset='utf-8' />
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Recepción</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+		<script type="text/javascript">
+$(function () {
+	
+      $.getJSON("arrime", function( data ) {
+	    newData = [];
+	    for (i in data) {
+		    newLineas = []
+		    for (j in data[i].data) {
+		    	newLineas.push( [ new Date(data[i].data[j][0]).getTime(), parseInt(data[i].data[j][1]) ] );
+		    }
+		    newData.push( {name: data[i].name, data: newLineas } );
+	    }
+        $('#container').highcharts({
+            chart: {
+                type: 'spline'
+            },
+            title: {
+                text: 'Recepción'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                },
+                title: {
+                    text: 'Fecha'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Toneladas'
+                },
+                min: 0
+            },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br>',
+                pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+            },
+
+            series: newData
+        });
+      });
+    });
+    
+
+		</script>
+	</head>
+	<body>
+<script src="{% static "hc/highcharts.js" %}"></script>
+<script src="{% static "hc/modules/exporting.js" %}"></script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+	</body>
+</html>
