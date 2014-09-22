@@ -12,8 +12,9 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
-@login_required(redirect_field_name='next', login_url='/login/')
+@login_required(redirect_field_name='next', login_url=reverse('logingeneral'))
 def index(request):
 #     latest_despacho_list = Despacho.objects.all()
     latest_recepcion_list = Recepcion.objects.order_by('-fecha')[0:10]
@@ -52,7 +53,7 @@ def calendario(request):
     })
     return HttpResponse(template.render(context))
 
-@login_required(redirect_field_name='next', login_url='/login/')
+@login_required(redirect_field_name='next', login_url=reverse('logingeneral'))
 def grafico(request):
 #    latest_recepcion_list = Recepcion.objects.all()
     template = loader.get_template('general/grafico.html')
