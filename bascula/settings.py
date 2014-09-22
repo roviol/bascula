@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'grappelli.dashboard',
+#     'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -114,7 +114,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 GRAPPELLI_INDEX_DASHBOARD = {
     'django.contrib.admin.site': 'bascula.dashboard.CustomIndexDashboard',
-    'bascula.admin.operador_site': 'bascula.dashboardoper.CustomIndexDashboard',
+#     'bascula.admin.operador_site': 'bascula.dashboardoper.CustomIndexDashboard',
 }
 
 GRAPPELLI_AUTOCOMPLETE_SEARCH_FIELDS = {
