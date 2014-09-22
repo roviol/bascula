@@ -12,9 +12,9 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
 
-@login_required(redirect_field_name='next', login_url=reverse('logingeneral'))
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def index(request):
 #     latest_despacho_list = Despacho.objects.all()
     latest_recepcion_list = Recepcion.objects.order_by('-fecha')[0:10]
@@ -41,10 +41,11 @@ def login_user(request):
                 return HttpResponseRedirect(siguiente)
     siguiente = request.GET.get('next', '')
     context = {'next':siguiente,
-        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE}
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+        }
     return render_to_response('general/login.html', context, context_instance=RequestContext(request))
 
-@login_required(redirect_field_name='next', login_url='/login/')
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def calendario(request):
 #    latest_recepcion_list = Recepcion.objects.all()
     template = loader.get_template('general/calendario.html')
@@ -53,7 +54,7 @@ def calendario(request):
     })
     return HttpResponse(template.render(context))
 
-@login_required(redirect_field_name='next', login_url=reverse('logingeneral'))
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def grafico(request):
 #    latest_recepcion_list = Recepcion.objects.all()
     template = loader.get_template('general/grafico.html')
