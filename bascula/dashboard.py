@@ -23,10 +23,18 @@ class CustomIndexDashboard(Dashboard):
         
         site_name = get_admin_site_name(context)
         
+        self.children.append(modules.LinkList(
+            title='Inicio',
+            column=1,
+            children=(
+                ['Reportes', reverse('inicio')],
+            )
+        ))
+        
         self.children.append(modules.AppList(
             title='Operadores',
             column=1,
-            exclude=('arrime.*','general.*','despacho.*','produccion.*', 'django.contrib.*',)
+            exclude=('supervisor.*','general.*','produccion.*', 'django.contrib.*',)
         ))
 
         self.children.append(modules.Group(
@@ -34,24 +42,17 @@ class CustomIndexDashboard(Dashboard):
             column=1,
             collapsible=True,
             children = [
-               modules.ModelList(
-                    title='Arrime',
+                modules.AppList(
+                    title='Cambios',
                     column=1,
-                    collapsible=False,
-                    models=('arrime.models.*',)
+                    exclude=('arrime.*','despacho.*','general.*','produccion.*', 'django.contrib.*',)
                 ),
-               modules.ModelList(
-                    title='Despacho',
-                    column=1,
-                    css_classes=('collapse closed',),
-                    models=('despacho.models.*',)
-                ),
-               modules.ModelList(
-                    title=u'Producción',
-                    column=1,
-                    css_classes=('collapse closed',),
-                    models=('produccion.models.*',)
-                )
+#                modules.ModelList(
+#                     title=u'Producción',
+#                     column=1,
+#                     css_classes=('collapse closed',),
+#                     models=('produccion.models.*',)
+#                 )
             ]
         ))
         

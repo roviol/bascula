@@ -38,13 +38,13 @@ class UnidadAdmin(admin.ModelAdmin):
 
 admin.site.register(Bascula)
 admin.site.register(MateriaPrima)
-admin.site.register(ProductoFinal)
+# admin.site.register(ProductoFinal)
 admin.site.register(Proveedor,EmpresaAdmin)
 admin.site.register(Unidad,UnidadAdmin)
 admin.site.register(Transportista,EmpresaAdmin)
-admin.site.register(Cliente,EmpresaAdmin)
-admin.site.register(Proceso,ProcesoAdmin)
+# admin.site.register(Cliente,EmpresaAdmin)
+# admin.site.register(Proceso,ProcesoAdmin)
 
 operador_site.register(Proveedor,EmpresaAdmin)
 operador_site.register(Transportista,EmpresaAdmin)
-operador_site.register(Cliente,EmpresaAdmin)
+# operador_site.register(Cliente,EmpresaAdmin)

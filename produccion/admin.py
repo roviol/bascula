@@ -14,6 +14,5 @@ class SalidaInline(admin.TabularInline):
 class ProduccionAdmin(admin.ModelAdmin):
     inlines = [EntradaInline, SalidaInline]
 
-admin.site.register(Produccion,ProduccionAdmin)
+# admin.site.register(Produccion,ProduccionAdmin)
 
-# Register your models here.

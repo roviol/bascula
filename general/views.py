@@ -1,31 +1,66 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render_to_response,redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from arrime.models import Recepcion
+from despacho.models import Despacho
 from general.models import Bascula
 from django.core import serializers
 from django.template import RequestContext, loader
 from django.db.models import Count, Sum
 import json
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
+@login_required(redirect_field_name='next', login_url='/login/')
 def index(request):
-#    latest_recepcion_list = Recepcion.objects.all()
+#     latest_despacho_list = Despacho.objects.all()
+    latest_recepcion_list = Recepcion.objects.order_by('-fecha')[0:10]
     template = loader.get_template('general/index.html')
+    context = RequestContext(request, {
+        'latest_recepcion_list': latest_recepcion_list,
+#         'latest_despacho_list': latest_despacho_list,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+    })
+    return HttpResponse(template.render(context))
+
+def login_user(request):
+    logout(request)
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                siguiente = request.POST.get('next', '/')
+                return HttpResponseRedirect(siguiente)
+    siguiente = request.GET.get('next', '')
+    context = {'next':siguiente,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE}
+    return render_to_response('general/login.html', context, context_instance=RequestContext(request))
+
+@login_required(redirect_field_name='next', login_url='/login/')
+def calendario(request):
+#    latest_recepcion_list = Recepcion.objects.all()
+    template = loader.get_template('general/calendario.html')
     context = RequestContext(request, {
 #        'latest_recepcion_list': latest_recepcion_list,
     })
     return HttpResponse(template.render(context))
 
-
+@login_required(redirect_field_name='next', login_url='/login/')
 def grafico(request):
 #    latest_recepcion_list = Recepcion.objects.all()
     template = loader.get_template('general/grafico.html')
     context = RequestContext(request, {
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
 #        'latest_recepcion_list': latest_recepcion_list,
     })
     return HttpResponse(template.render(context))
-
 
 def recepciones(request):
     recepciones = Recepcion.objects.order_by('-fecha')
@@ -52,7 +87,7 @@ def arrime(request):
     select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
     categorias=[]
     for bascula in basculas:
-        recepciones = Recepcion.objects.filter(ubicacion__id=bascula.id).exclude(neto__isnull=True).extra(select=select_data).values('d').annotate(netosum = Sum('neto'),total = Count('id')).order_by()
+        recepciones = Recepcion.objects.filter(ubicacion__id=bascula.id).exclude(neto__isnull=True).extra(select=select_data).values('d').annotate(netosum = Sum('neto'),total = Count('id')).order_by("d")
         recepcionesp = []
         for item in recepciones:
             inicio=str(item['d'])

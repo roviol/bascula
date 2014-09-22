@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-#    'grappelli.dashboard',
+    'grappelli.dashboard',
     'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,9 +40,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'general',
     'arrime',
-    'despacho',
-    'produccion',
-    'operador',
+#     'despacho',
+#     'produccion',
+    'supervisor',
 )
 
 MIDDLEWARE_CLASSES = (

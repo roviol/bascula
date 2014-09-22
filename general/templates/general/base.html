@@ -1,0 +1,39 @@
+{% load staticfiles %}
+<meta charset='utf-8' />
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+		<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
+		<script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+		{% block scriptjson %} {% endblock %}
+	</head>
+	{% autoescape off %}
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="{% url 'inicio' %}">{% block title %}{% endblock %}</a>
+					<a class="navbar-brand" href="{% url 'grafico' %}">{% block menu1 %}{% endblock %}</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							<a class="navbar-brand" href="#">{% block adminurl %}{% endblock %}</a>
+						</li>
+					</ul>
+				</div>
+				<div class="collapse navbar-collapse" >
+					<a class="navbar-right" href="{% url 'logingeneral' %}">Salir</a>
+				</div>
+			</div>
+			</nav>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					{% block main %}
+					{% endblock %}
+				</div>
+			</div>
+	</body>
+	{% endautoescape %}
+</html>

@@ -15,5 +15,7 @@ urlpatterns = patterns('',
     url(r'^export/(?P<arrime_id>\d+)', 'arrime.views.export_as_json', name='export'),
     url(r'^reportearrime/(?P<arrime_id>\d+)', 'arrime.views.reportearrime', name='reportearrime'),
     url(r'^general/', include('general.urls')),
+    url(r'^login/$', 'general.views.login_user', name='logingeneral'),
+    url(r'^$', 'general.views.index', name='inicio')
  
 )
