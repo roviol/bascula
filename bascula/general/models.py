@@ -28,6 +28,7 @@ class Producto(models.Model):
 
 class Bascula(models.Model):
     nombre = models.CharField(max_length=150)
+    urlserial = models.CharField(max_length=500)
     def __unicode__(self):  
         return self.nombre
 

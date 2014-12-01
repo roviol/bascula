@@ -9,11 +9,45 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.lib.units import mm
 from reportlab.graphics import renderPDF
 from django.conf import settings
+import urllib
+from decimal import Decimal
 
 def export_as_json(request, arrime_id):
     queryset = Recepcion.objects.filter(pk=arrime_id)
     response = HttpResponse(content_type="application/json")
     serializers.serialize("json", queryset, stream=response)
+    return response
+
+def netoact(pbruto, ptara):
+    try:
+        if pbruto != None and ptara != None:
+            return Decimal(pbruto) - Decimal(ptara)
+        else:
+            return None
+    except:
+        return None
+
+def bruto(request, arrime_id):
+    queryset = Recepcion.objects.get(pk=arrime_id)
+    urlserial=queryset.ubicacion.urlserial
+    valorserial=urllib.urlopen(urlserial)
+    vserial=valorserial.read()
+    queryset.bruto=vserial
+    queryset.neto=netoact(queryset.bruto,queryset.tara)
+    queryset.save()
+    response = HttpResponse(queryset.neto)
+    return response
+
+
+def tara(request, arrime_id):
+    queryset = Recepcion.objects.get(pk=arrime_id)
+    urlserial=queryset.ubicacion.urlserial
+    valorserial=urllib.urlopen(urlserial)
+    vserial=valorserial.read()
+    queryset.tara=vserial
+    queryset.neto=netoact(queryset.bruto,queryset.tara)
+    queryset.save()
+    response = HttpResponse(queryset.neto)
     return response
 
 def reportearrime(request, arrime_id):
