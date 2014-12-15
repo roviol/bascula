@@ -38,7 +38,7 @@ class UnidadAdmin(admin.ModelAdmin):
 
 admin.site.register(Bascula)
 admin.site.register(MateriaPrima)
-# admin.site.register(ProductoFinal)
+admin.site.register(ProductoFinal)
 admin.site.register(Proveedor,EmpresaAdmin)
 admin.site.register(Unidad,UnidadAdmin)
 admin.site.register(Transportista,EmpresaAdmin)

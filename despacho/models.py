@@ -3,3 +3,4 @@ import general
 
 class Despacho(general.models.Transaccion):
     producto =  models.ForeignKey('general.ProductoFinal')
+    cliente =  models.ForeignKey('general.Cliente')

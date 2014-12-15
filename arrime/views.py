@@ -53,7 +53,6 @@ def tara(request, arrime_id):
 def reportearrime(request, arrime_id):
     queryset = Recepcion.objects.filter(pk=arrime_id)
     response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="ticket.pdf"'
     response['Content-Disposition'] = 'inline; filename="ticket.pdf"'
     response['Cache-Control'] = 'no-cache'
     p = canvas.Canvas(response, pagesize=letter)
@@ -76,7 +75,6 @@ def reportearrime(request, arrime_id):
     w=b[2]-b[0] 
     h=b[3]-b[1] 
 
-    #d = Drawing(45,45,transform=[45./w,0,0,45./h,0,0]) 
     d = Drawing(90,90,transform=[90./w,0,0,90./h,0,0])
     d.add(qrw)
 
