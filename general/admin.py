@@ -42,7 +42,7 @@ admin.site.register(ProductoFinal)
 admin.site.register(Proveedor,EmpresaAdmin)
 admin.site.register(Unidad,UnidadAdmin)
 admin.site.register(Transportista,EmpresaAdmin)
-# admin.site.register(Cliente,EmpresaAdmin)
+admin.site.register(Cliente,EmpresaAdmin)
 # admin.site.register(Proceso,ProcesoAdmin)
 
 operador_site.register(Proveedor,EmpresaAdmin)

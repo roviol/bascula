@@ -16,7 +16,7 @@ class DespachoAdmin(admin.ModelAdmin):
         funciontxt =  """<script>
         function refrescabruto"""+str(obj.id)+"""(){
         if (confirm('Actualizar peso bruto?')) {
-            grp.jQuery.get('"""+reverse('bruto', args=[obj.id])+"""',  function( data ) {location.reload();});
+            grp.jQuery.get('"""+reverse('despachobruto', args=[obj.id])+"""',  function( data ) {location.reload();});
           }             
         }
         </script>"""
@@ -41,7 +41,7 @@ class DespachoAdmin(admin.ModelAdmin):
         funciontxt =  """<script>
         function refrescatara"""+str(obj.id)+"""(){
         if (confirm('Actualizar peso tara?')) {
-            grp.jQuery.get('"""+reverse('tara', args=[obj.id])+"""',  function( data ) {location.reload();});
+            grp.jQuery.get('"""+reverse('despachotara', args=[obj.id])+"""',  function( data ) {location.reload();});
           }
         }
         </script>"""

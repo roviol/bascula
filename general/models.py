@@ -49,7 +49,6 @@ class MateriaPrima(Producto):
 
 class Transaccion(models.Model):
     ubicacion = models.ForeignKey('general.Bascula')
-    proveedor =  models.ForeignKey('general.Proveedor')
     transportista =  models.ForeignKey('general.Transportista')
     fecha = models.DateTimeField(null=True, blank=True, default=datetime.datetime.now)
     bruto = models.DecimalField(max_digits=8,  blank=True, decimal_places=2, null=True, verbose_name='Peso Bruto')
@@ -58,7 +57,7 @@ class Transaccion(models.Model):
     placa = models.CharField(max_length=20)
     conductor = models.CharField(max_length=50)
     def __unicode__(self):  
-        return self.ubicacion.nombre + ' ' + self.proveedor.nombre + ' ' + self.fecha.strftime('%Y-%m-%d') + ' ' + str(self.neto)
+        return self.ubicacion.nombre + ' ' + self.fecha.strftime('%Y-%m-%d') + ' ' + str(self.neto)
     def listo(self):
         return not (self.neto is None)
     listo.admin_order_field = 'neto'

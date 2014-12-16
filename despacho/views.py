@@ -51,6 +51,7 @@ def tara(request, despacho_id):
     return response
 
 def reportedespacho(request, despacho_id):
+    inicia=50;
     queryset = Despacho.objects.filter(pk=despacho_id)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="ticket.pdf"'
@@ -58,12 +59,12 @@ def reportedespacho(request, despacho_id):
     p = canvas.Canvas(response, pagesize=letter)
     #Encabezado
     p.setFont("Helvetica-Bold", 8)
-    p.drawString(450,730, str(queryset[0].fecha))
+    #p.drawString(450,730-inicia, str(queryset[0].fecha))
     #Ticket
     p.setFont("Helvetica-Bold", 8)
-    p.drawString(50,730, 'Ticket:')
+    p.drawString(50,730-inicia, 'Ticket:')
     p.setFont("Helvetica-Bold", 8)
-    p.drawString(150,730, str(queryset[0].id))
+    p.drawString(150,730-inicia, str(queryset[0].id))
     #barcode=code39.Extended39(str(queryset[0].id),barWidth=0.5*mm,barHeight=5*mm)
     #barcode.drawOn(p,250,730)
     qrw = QrCodeWidget(str(queryset[0].id)+';'+
@@ -75,35 +76,89 @@ def reportedespacho(request, despacho_id):
     w=b[2]-b[0] 
     h=b[3]-b[1] 
 
-    d = Drawing(90,90,transform=[90./w,0,0,90./h,0,0])
-    d.add(qrw)
+    d = Drawing(90,90-inicia,transform=[90./w,0,0,90./h,0,0])
+    #d.add(qrw)
 
-    renderPDF.draw(d, p, 350, 680)
+    renderPDF.draw(d, p, 350, 680-inicia)
     #Empresa
     p.setFont("Helvetica-Bold", 24)
-    p.drawString(50,700, settings.GRAPPELLI_ADMIN_TITLE)
+    p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
     p.setFont("Helvetica-Bold", 15)
-    p.drawString(200,684, str(queryset[0].ubicacion))
+    p.drawString(200,684-inicia, str(queryset[0].ubicacion))
     #Productor y Transporte
     p.setFont("Helvetica-Bold", 12)
-    p.drawString(50, 650, "Productor: ")
-    p.drawString(140, 650, str(queryset[0].cliente))
-    p.drawString(50, 630, "Transportista: ")
-    p.drawString(140, 630, str(queryset[0].transportista))
+    p.drawString(50, 650-inicia, "Cliente: ")
+    p.drawString(140, 650-inicia, str(queryset[0].cliente))
+    p.drawString(50, 630-inicia, "Transportista: ")
+    p.drawString(140, 630-inicia, str(queryset[0].transportista))
     #Cantidades
     #margen pesos
     margenpeso=70
     p.setFont("Helvetica-Bold", 18)
-    p.drawString(29+margenpeso, 600, "Peso: ")
+    p.drawString(29+margenpeso, 600-inicia, "Peso: ")
     p.setFont("Helvetica-Bold", 18)
-    p.drawString(50+margenpeso, 580, "Bruto: ")
-    p.drawString(140+margenpeso, 580, str(queryset[0].bruto))
-    p.drawString(280+margenpeso, 580, "Tara: ")
-    p.drawString(330+margenpeso, 580, str(queryset[0].tara))
+    p.drawString(50+margenpeso, 580-inicia, "Bruto: ")
+    p.drawString(140+margenpeso, 580-inicia, str(queryset[0].bruto))
+    p.drawString(280+margenpeso, 580-inicia, "Tara: ")
+    p.drawString(330+margenpeso, 580-inicia, str(queryset[0].tara))
     #Neto
     p.setFont("Helvetica-Bold", 24)
-    p.drawString(300+margenpeso, 550, "Neto: ")
-    p.drawString(380+margenpeso, 550, str(queryset[0].neto))
+    p.drawString(300+margenpeso, 550-inicia, "Neto: ")
+    p.drawString(380+margenpeso, 550-inicia, str(queryset[0].neto))
+
+    #Repite
+
+    inicia=400
+    #Encabezado
+    p.setFont("Helvetica-Bold", 8)
+    #p.drawString(450,730-inicia, str(queryset[0].fecha))
+    #Ticket
+    p.setFont("Helvetica-Bold", 8)
+    p.drawString(50,730-inicia, 'Ticket:')
+    p.setFont("Helvetica-Bold", 8)
+    p.drawString(150,730-inicia, str(queryset[0].id))
+    #barcode=code39.Extended39(str(queryset[0].id),barWidth=0.5*mm,barHeight=5*mm)
+    #barcode.drawOn(p,250,730)
+    qrw = QrCodeWidget(str(queryset[0].id)+';'+
+                       str(queryset[0].cliente)+';'
+                       +str(queryset[0].fecha)+';'
+                       +str(queryset[0].neto)) 
+    b = qrw.getBounds()
+
+    w=b[2]-b[0] 
+    h=b[3]-b[1] 
+
+    d = Drawing(90,90-inicia,transform=[90./w,0,0,90./h,0,0])
+    #d.add(qrw)
+
+    renderPDF.draw(d, p, 350, 680-inicia)
+    #Empresa
+    p.setFont("Helvetica-Bold", 24)
+    p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
+    p.setFont("Helvetica-Bold", 15)
+    p.drawString(200,684-inicia, str(queryset[0].ubicacion))
+    #Productor y Transporte
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(50, 650-inicia, "Productor: ")
+    p.drawString(140, 650-inicia, str(queryset[0].cliente))
+    p.drawString(50, 630-inicia, "Transportista: ")
+    p.drawString(140, 630-inicia, str(queryset[0].transportista))
+    #Cantidades
+    #margen pesos
+    margenpeso=70
+    p.setFont("Helvetica-Bold", 18)
+    p.drawString(29+margenpeso, 600-inicia, "Peso: ")
+    p.setFont("Helvetica-Bold", 18)
+    p.drawString(50+margenpeso, 580-inicia, "Bruto: ")
+    p.drawString(140+margenpeso, 580-inicia, str(queryset[0].bruto))
+    p.drawString(280+margenpeso, 580-inicia, "Tara: ")
+    p.drawString(330+margenpeso, 580-inicia, str(queryset[0].tara))
+    #Neto
+    p.setFont("Helvetica-Bold", 24)
+    p.drawString(300+margenpeso, 550-inicia, "Neto: ")
+    p.drawString(380+margenpeso, 550-inicia, str(queryset[0].neto))
+
+
       
     p.showPage()
     p.save()
