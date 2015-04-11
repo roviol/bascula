@@ -1,0 +1,38 @@
+{% extends "general/base.html" %}
+{% load staticfiles %}
+{% block menu1 %}Gráfico{% endblock %}
+{% block menu3 %}Resumen{% endblock %}
+{% block adminurl %}<a href='{% url 'admin:index' %}'>Administrativo</a>{% endblock %}
+        {% block scriptjson %}
+                <script type="text/javascript" src="{% static "fullcalendar/lib/jquery.min.js" %}"></script>
+                <script type="text/javascript">
+
+                function refresca(panyo, pmes, pdia){
+                        $('#container').load("{% url 'diariorep' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia);
+                        }
+
+                        $(function() {
+                                actualiza();
+                        });
+
+                        function actualiza(){
+                                vanyo=$( "#desdeanyo").val();
+                                vmes=$( "#desdemes").val();
+                                vdia=$( "#desdedia").val();
+                                refresca(vanyo,vmes,vdia);
+                        }
+                </script>
+                {% endblock %}
+{% block title %}{{ GRAPPELLI_ADMIN_TITLE }}{% endblock %}
+                {% block main %}
+
+<label>Año</label>
+<input id="desdeanyo" value="{{ hoy.year }}" maxlength="4" size="4">
+<label>Mes</label>
+<input id="desdemes"  value="{{ hoy.month }}" maxlength="4" size="4">
+<label>Dia</label>
+<input id="desdedia" value="{{ hoy.day }}" maxlength="4" size="4">
+<button  onclick ="actualiza()">Buscar</button>
+<div id="container"></div>
+
+{% endblock %}

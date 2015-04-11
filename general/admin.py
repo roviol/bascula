@@ -28,6 +28,13 @@ class EmpresaAdmin(admin.ModelAdmin):
     ]
     list_display = ('nombre', 'rif','telefono')
     search_fields = ['nombre','rif']
+    readonly_fields = ()
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return [f.name for f in self.model._meta.fields]
+        else:
+            return self.readonly_fields
 
 class UnidadAdmin(admin.ModelAdmin):
     fieldsets = [

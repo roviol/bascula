@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
+import datetime
+import calendar
 
 @login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def index(request):
@@ -58,8 +60,10 @@ def calendario(request):
 def grafico(request):
 #    latest_recepcion_list = Recepcion.objects.all()
     template = loader.get_template('general/grafico.html')
+    listames = range(1,13)
     context = RequestContext(request, {
-        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE,
+        'listames': listames
 #        'latest_recepcion_list': latest_recepcion_list,
     })
     return HttpResponse(template.render(context))
@@ -85,11 +89,15 @@ def arrimeproveedor(request):
     return HttpResponse(data, content_type="application/json")
 
 def arrime(request):
+    vanyo = int(request.GET["anyo"])
+    vmes = int(request.GET["mes"])
+    desde = datetime.date(vanyo,vmes,1)
+    hasta = add_months(desde,1)
     basculas = Bascula.objects.all()
     select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
     categorias=[]
     for bascula in basculas:
-        recepciones = Recepcion.objects.filter(ubicacion__id=bascula.id).exclude(neto__isnull=True).extra(select=select_data).values('d').annotate(netosum = Sum('neto'),total = Count('id')).order_by("d")
+        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).extra(select=select_data).values('d').annotate(netosum = Sum('neto'),total = Count('id')).order_by("d")
         recepcionesp = []
         for item in recepciones:
             inicio=str(item['d'])
@@ -98,3 +106,85 @@ def arrime(request):
         categorias.append({'name': bascula.nombre, 'data': recepcionesp})
     data = json.dumps(categorias)
     return HttpResponse(data, content_type="application/json")
+
+
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
+def diario(request):
+    hoy=datetime.datetime.now()
+#    latest_recepcion_list = Recepcion.objects.all()
+    template = loader.get_template('general/diario.html')
+    context = RequestContext(request, {
+        'hoy': hoy,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+#        'latest_recepcion_list': latest_recepcion_list,
+    })
+    return HttpResponse(template.render(context))
+
+def diariorep(request):
+    vanyo = int(request.GET["anyo"])
+    vmes = int(request.GET["mes"])
+    vdia = int(request.GET["dia"])
+    desde = datetime.date(vanyo,vmes,vdia)
+    hasta=desde+datetime.timedelta(days=1)
+    basculas = Bascula.objects.all()
+    listarecep=[]
+    for bascula in basculas:
+        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).order_by('fecha')
+        listarecep.append(recepciones)
+
+    template = loader.get_template('general/diariorep.html')
+    context = RequestContext(request, {
+        'latest_recepcion_list': listarecep,
+#         'latest_despacho_list': latest_despacho_list,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+    })
+    return HttpResponse(template.render(context))
+
+
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
+def resumen(request):
+    hoy=datetime.datetime.now()
+#    latest_recepcion_list = Recepcion.objects.all()
+    template = loader.get_template('general/resumen.html')
+    context = RequestContext(request, {
+        'hoy': hoy,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+#        'latest_recepcion_list': latest_recepcion_list,
+    })
+    return HttpResponse(template.render(context))
+
+def resumenrep(request):
+    vanyo = int(request.GET["anyo"])
+    vmes = int(request.GET["mes"])
+    #vdia = int(request.GET["dia"])
+    desde = datetime.date(vanyo,vmes,1)
+    hasta = add_months(desde,1)
+    basculas = Bascula.objects.all()
+    select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
+    categorias=[]
+    for bascula in basculas:
+        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).extra(select=select_data).values('d','proveedor__nombre').annotate(netosum = Sum('neto'),total = Count('id')).order_by("d","proveedor__nombre")
+        recepcionesp = []
+        for item in recepciones:
+            #inicio=str(item['d'])
+            #neto = str(item['netosum'])
+            #recepcionesp.append([inicio, neto])
+            recepcionesp.append({'dia': item['d'], 'neto': item['netosum'], 'proveedor': item['proveedor__nombre']})
+        categorias.append({'name': bascula.nombre, 'data': recepcionesp})
+
+    template = loader.get_template('general/resumenrep.html')
+    context = RequestContext(request, {
+        'categorias': categorias,
+#         'latest_despacho_list': latest_despacho_list,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+    })
+    return HttpResponse(template.render(context))
+
+def add_months(sourcedate,months):
+     month = sourcedate.month - 1 + months
+     year = sourcedate.year + month / 12
+     month = month % 12 + 1
+     day = min(sourcedate.day,calendar.monthrange(year,month)[1])
+     return datetime.date(year,month,day)
+
+

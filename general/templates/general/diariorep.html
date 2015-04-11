@@ -1,0 +1,24 @@
+
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
+<script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-8">
+		{% for recepciones in latest_recepcion_list %}
+		<table class="table table-striped table-condensed">
+			{% for recepcion in recepciones %}
+			<tr>
+				<td>{{ recepcion.ubicacion }} </td>
+				<td>{{ recepcion.proveedor.nombre }} </td>
+				<td> {{ recepcion.fecha|date:"Y/m/d g:i a"|lower }} </td>
+				<td style="text-align: right"> {{ recepcion.neto }} </td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endfor %}
+	</div>
+	<div class="col-md-1"></div>
+</div>

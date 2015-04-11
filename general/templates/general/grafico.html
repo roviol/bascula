@@ -1,12 +1,15 @@
 {% extends "general/base.html" %}
 {% load staticfiles %}
+{% block menu2 %}Diario{% endblock %}
+{% block menu3 %}Resumen{% endblock %}
 {% block adminurl %}<a href='{% url 'admin:index' %}'>Administrativo</a>{% endblock %}
 	{% block scriptjson %}
 		<script type="text/javascript" src="{% static "fullcalendar/lib/jquery.min.js" %}"></script>
 		<script type="text/javascript">
-			$(function() {
 
-				$.getJSON("{% url 'arrime' %}", function(data) {
+		function refresca(panyo, pmes){
+
+				$.getJSON("{% url 'arrime' %}?anyo="+panyo+"&mes="+pmes, function(data) {
 					newData = [];
 					for (i in data) {
 						newLineas = []
@@ -52,14 +55,33 @@
 						series : newData
 					});
 				});
+			}
+
+			$(function() {
+				actualiza();
 			});
 
+			function actualiza(){
+				vanyo=$( "#desdeanyo option:selected")[0].value;
+				vmes=$( "#desdemes option:selected")[0].value;
+				refresca(vanyo,vmes);
+
+			}
 		</script>
 		{% endblock %}
 {% block title %}{{ GRAPPELLI_ADMIN_TITLE }}{% endblock %}
 		{% block main %}
 		<script src="{% static "hc/highcharts.js" %}"></script>
 		<script src="{% static "hc/modules/exporting.js" %}"></script>
-
+<label>Año</label>
+<select id="desdeanyo"  onchange="actualiza()">
+  <option value="2015">2015</option>
+</select>
+<label>Mes</label>
+<select id="desdemes" onchange="actualiza()">
+        {% for mesn in listames %}
+          <option value="{{ mesn }}">{{ mesn }}</option>
+        {% endfor %}
+</select>
 		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 		{% endblock %}
