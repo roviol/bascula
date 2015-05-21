@@ -128,15 +128,26 @@ def diariorep(request):
     hasta=desde+datetime.timedelta(days=1)
     basculas = Bascula.objects.all()
     listarecep=[]
+    suma = 0
+    sumab = 0
+    basculasret=[]
     for bascula in basculas:
+        sumab = 0
         recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).order_by('fecha')
-        listarecep.append(recepciones)
+        listarecep=[]
+        for item in recepciones:
+            listarecep.append(item)
+            suma=suma+item.neto
+            sumab=sumab+item.neto
+        print(listarecep)
+        basculasret.append({'bascula': bascula, 'recepciones': listarecep, 'suma': sumab})
 
     template = loader.get_template('general/diariorep.html')
     context = RequestContext(request, {
-        'latest_recepcion_list': listarecep,
+        'latest_recepcion_list': basculasret,
 #         'latest_despacho_list': latest_despacho_list,
-        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE,
+        'suma': suma
     })
     return HttpResponse(template.render(context))
 

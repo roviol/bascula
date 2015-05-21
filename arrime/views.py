@@ -8,6 +8,7 @@ from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing 
 from reportlab.lib.units import mm
 from reportlab.graphics import renderPDF
+from reportlab.platypus import Image
 from django.conf import settings
 import urllib
 from decimal import Decimal
@@ -50,8 +51,11 @@ def tara(request, arrime_id):
     response = HttpResponse(queryset.neto)
     return response
 
-def reportearrime(request, arrime_id):
-    inicia=50;
+def reportearrime(request, arrime_id):    
+    #logo = Image("/home/roland/Documentos/bascula/general/static/imagenes/logo.jpg")
+    logo = settings.STATIC_ROOT+"/imagenes/logo.jpg"
+    print(logo)
+    inicia=70;
     queryset = Recepcion.objects.filter(pk=arrime_id)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="ticket.pdf"'
@@ -81,8 +85,11 @@ def reportearrime(request, arrime_id):
 
     renderPDF.draw(d, p, 350, 680-inicia)
     #Empresa
+    p.drawImage(logo,50,720-inicia)
     p.setFont("Helvetica-Bold", 24)
     p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
+    p.setFont("Helvetica-Bold", 15)
+    p.drawString(400,784-inicia, queryset[0].fecha.strftime("%d/%m/%Y %I:%M %p"))
     p.setFont("Helvetica-Bold", 15)
     p.drawString(200,684-inicia, str(queryset[0].ubicacion))
     #Productor y Transporte
@@ -108,7 +115,7 @@ def reportearrime(request, arrime_id):
 
     #Repite
 
-    inicia=400
+    inicia=inicia+400
     #Encabezado
     p.setFont("Helvetica-Bold", 8)
     #p.drawString(450,730-inicia, str(queryset[0].fecha))
@@ -133,8 +140,11 @@ def reportearrime(request, arrime_id):
 
     renderPDF.draw(d, p, 350, 680-inicia)
     #Empresa
+    p.drawImage(logo,50,720-inicia)
     p.setFont("Helvetica-Bold", 24)
     p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
+    p.setFont("Helvetica-Bold", 15)
+    p.drawString(400,784-inicia, queryset[0].fecha.strftime("%d/%m/%Y %I:%M %p"))
     p.setFont("Helvetica-Bold", 15)
     p.drawString(200,684-inicia, str(queryset[0].ubicacion))
     #Productor y Transporte

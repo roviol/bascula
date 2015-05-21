@@ -70,6 +70,7 @@
         if (elem.val()) values = elem.val().split(",");
         values.push(value);
         elem.val(values.join(","));
+        elem.trigger('change');
         return values.join(",");
     };
     
@@ -78,6 +79,7 @@
         if (elem.val()) values = elem.val().split(",");
         values.splice(position,1);
         elem.val(values.join(","));
+        elem.trigger('change');
         return values.join(",");
     };
     
@@ -167,12 +169,12 @@
                 if (!item.value) {
                     return $("<li></li>")
                         .data( "item.autocomplete", item )
-                        .append( "<span class='error'>" + item.label)
+                        .append( "<span class='error'>" + item.label + "</span>")
                         .appendTo(ul);
                 } else {
                     return $("<li></li>")
                         .data( "item.autocomplete", item )
-                        .append( "<a>" + item.label)
+                        .append( "<a>" + item.label + "</a>")
                         .appendTo(ul);
                 }
             };

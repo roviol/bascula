@@ -55,6 +55,7 @@ class Transaccion(models.Model):
     tara = models.DecimalField(max_digits=8,  blank=True, decimal_places=2, null=True, verbose_name='Tara')
     neto = models.DecimalField(max_digits=8,  blank=True, decimal_places=2, null=True, verbose_name='Peso Neto')
     placa = models.CharField(max_length=20)
+    observacion = models.CharField(max_length=255,  blank=True)
     conductor = models.CharField(max_length=50)
     def __unicode__(self):  
         return self.ubicacion.nombre + ' ' + self.fecha.strftime('%Y-%m-%d') + ' ' + str(self.neto)

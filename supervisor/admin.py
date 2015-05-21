@@ -42,6 +42,7 @@ class DespachoAdminOper(admin.ModelAdmin):
         (None, {'fields': ['ubicacion', 'producto', 'cliente', 'transportista', 'fecha']}),
         ('Vehiculo', {'fields': ['placa', 'conductor', ]}),
         ('Arrime', {'fields': ['bruto', 'tara', 'neto' ]}),
+        ('Observacion', {'fields': ['observacion', ]}),
     ]
     raw_id_fields = ('cliente','transportista')
     autocomplete_lookup_fields = {

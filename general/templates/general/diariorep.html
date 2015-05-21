@@ -4,12 +4,13 @@
 <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
 <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-theme.min.css" %}">
 <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+{% for recepcionesb in latest_recepcion_list %}
 <div class="row">
-	<div class="col-md-1"></div>
+	<div class="col-md-1">{{ recepcionesb.bascula.nombre }} </div>
+	
 	<div class="col-md-8">
-		{% for recepciones in latest_recepcion_list %}
 		<table class="table table-striped table-condensed">
-			{% for recepcion in recepciones %}
+		    {% for recepcion in recepcionesb.recepciones %}
 			<tr>
 				<td>{{ recepcion.ubicacion }} </td>
 				<td>{{ recepcion.proveedor.nombre }} </td>
@@ -17,8 +18,20 @@
 				<td style="text-align: right"> {{ recepcion.neto }} </td>
 			</tr>
 			{% endfor %}
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp; </td>
+				<td>&nbsp;</td>
+				<td style="text-align: right"> {{ recepcionesb.suma }} </td>
+			</tr>
 		</table>
-		{% endfor %}
 	</div>
 	<div class="col-md-1"></div>
+</div>
+{% endfor %}
+<div class="row">
+	<div class="col-md-6"></div>
+	<div class="col-md-1">Total: </div>
+
+	<div class="col-md-1">{{ suma }} </div>
 </div>

@@ -65,6 +65,7 @@ class RecepcionAdmin(admin.ModelAdmin):
         (None, {'fields': ['ubicacion', 'producto', 'proveedor', 'transportista', 'fecha']}),
         ('Vehiculo', {'fields': ['placa', 'conductor', ]}),
         ('Arrime', {'fields': ['bruto', 'tara', 'neto' ]}),
+        ('Observacion', {'fields': ['observacion', ]}),
     ]
     raw_id_fields = ('proveedor','transportista')
     readonly_fields = ('linkreporte','neto','bruto','tara','linkbruto','linktara')
