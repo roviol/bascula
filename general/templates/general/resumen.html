@@ -10,8 +10,8 @@
                 <link rel="stylesheet" href="{% static "datetimepicker/css/bootstrap-datetimepicker.css" %}">
                 <script type="text/javascript">
 
-                function refresca(panyo, pmes, pdia, panyoh, pmesh, pdiah){
-                        $('#container').load("{% url 'resumenrep' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia+"&anyoh="+panyoh+"&mesh="+pmesh+"&diah="+pdiah);
+                function refresca(panyo, pmes, pdia, phora, panyoh, pmesh, pdiah, phorah){
+                        $('#container').load("{% url 'resumenrep' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia+"&hora="+phora+"&anyoh="+panyoh+"&mesh="+pmesh+"&diah="+pdiah+"&horah="+phorah);
                         }
 
                         $(function() {
@@ -20,16 +20,20 @@
 
                         function actualiza(){
                                 desdefecha=$( "#desdefecha").val();
-                                var res = desdefecha.split("/");
+                                var resi = desdefecha.split(" ");
+                                var res = resi[0].split("/");
                                 vanyo=res[2];
                                 vmes=res[1];
                                 vdia=res[0];
+                                vhora=resi[1];
                                 hastafecha=$( "#hastafecha").val();
-                                var resh = hastafecha.split("/");
+                                var resih = hastafecha.split(" ");
+                                var resh = resih[0].split("/");
                                 vanyoh=resh[2];
                                 vmesh=resh[1];
                                 vdiah=resh[0];
-                                refresca(vanyo,vmes,vdia,vanyoh,vmesh,vdiah);
+                                vhorah=resih[1];
+                                refresca(vanyo,vmes,vdia,vhora,vanyoh,vmesh,vdiah,vhorah);
                         }
                 </script>
                 {% endblock %}
@@ -43,6 +47,6 @@
 <button  onclick ="actualiza()">Buscar</button>
 <div id="container"></div>
 <script type="text/javascript">
-  $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy', minView: 'month', maxView: 'year', language: 'es', autoclose: true, viewSelect: 'month'});
+  $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy hh', minView: 'month', maxView: 'year', language: 'es', autoclose: true, viewSelect: 'month'});
 </script>
 {% endblock %}
