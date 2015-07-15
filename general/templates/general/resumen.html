@@ -4,11 +4,14 @@
 {% block menu2 %}Diario{% endblock %}
 {% block adminurl %}<a href='{% url 'admin:index' %}'>Administrativo</a>{% endblock %}
         {% block scriptjson %}
-                <script type="text/javascript" src="{% static "fullcalendar/lib/jquery.min.js" %}"></script>
+                <script type="text/javascript" src="{% static "fullcalendar/lib/jquery.min.js" %}"></script>                
+                <script type="text/javascript" src="{% static "datetimepicker/js/bootstrap-datetimepicker.js" %}"></script>
+                <script type="text/javascript" src="{% static "datetimepicker/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
+                <link rel="stylesheet" href="{% static "datetimepicker/css/bootstrap-datetimepicker.css" %}">
                 <script type="text/javascript">
 
-                function refresca(panyo, pmes){
-                        $('#container').load("{% url 'resumenrep' %}?anyo="+panyo+"&mes="+pmes);
+                function refresca(panyo, pmes, pdia, panyoh, pmesh, pdiah){
+                        $('#container').load("{% url 'resumenrep' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia+"&anyoh="+panyoh+"&mesh="+pmesh+"&diah="+pdiah);
                         }
 
                         $(function() {
@@ -16,20 +19,30 @@
                         });
 
                         function actualiza(){
-                                vanyo=$( "#desdeanyo").val();
-                                vmes=$( "#desdemes").val();
-                                refresca(vanyo,vmes);
+                                desdefecha=$( "#desdefecha").val();
+                                var res = desdefecha.split("/");
+                                vanyo=res[2];
+                                vmes=res[1];
+                                vdia=res[0];
+                                hastafecha=$( "#hastafecha").val();
+                                var resh = hastafecha.split("/");
+                                vanyoh=resh[2];
+                                vmesh=resh[1];
+                                vdiah=resh[0];
+                                refresca(vanyo,vmes,vdia,vanyoh,vmesh,vdiah);
                         }
                 </script>
                 {% endblock %}
 {% block title %}{{ GRAPPELLI_ADMIN_TITLE }}{% endblock %}
                 {% block main %}
 
-<label>Año</label>
-<input id="desdeanyo" value="{{ hoy.year }}" maxlength="4" size="4">
-<label>Mes</label>
-<input id="desdemes"  value="{{ hoy.month }}" maxlength="4" size="4">
+<label>Desde</label>
+<input size="16" type="text" readonly class="form_datetime" id="desdefecha">
+<label>Hasta</label>
+<input size="16" type="text" readonly class="form_datetime" id="hastafecha">
 <button  onclick ="actualiza()">Buscar</button>
 <div id="container"></div>
-
+<script type="text/javascript">
+  $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy', minView: 'month', maxView: 'year', language: 'es', autoclose: true, viewSelect: 'month'});
+</script>
 {% endblock %}

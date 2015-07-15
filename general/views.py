@@ -170,9 +170,14 @@ def resumen(request):
 def resumenrep(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
+    vdia = int(request.GET["dia"])
+    vanyoh = int(request.GET["anyoh"])
+    vmesh = int(request.GET["mesh"])
+    vdiah = int(request.GET["diah"])
     #vdia = int(request.GET["dia"])
-    desde = datetime.date(vanyo,vmes,1)
-    hasta = add_months(desde,1)
+    desde = datetime.date(vanyo,vmes,vdia)
+    hasta = datetime.date(vanyoh,vmesh,vdiah)
+    #hasta = add_months(desde,1)
     basculas = Bascula.objects.all()
     select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
     categorias=[]
