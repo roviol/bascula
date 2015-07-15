@@ -5,6 +5,9 @@
 {% block adminurl %}<a href='{% url 'admin:index' %}'>Administrativo</a>{% endblock %}
         {% block scriptjson %}
                 <script type="text/javascript" src="{% static "fullcalendar/lib/jquery.min.js" %}"></script>
+                <script type="text/javascript" src="{% static "datetimepicker/js/bootstrap-datetimepicker.js" %}"></script>
+                <script type="text/javascript" src="{% static "datetimepicker/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
+                <link rel="stylesheet" href="{% static "datetimepicker/css/bootstrap-datetimepicker.css" %}">
                 <script type="text/javascript">
 
                 function refresca(panyo, pmes, pdia){
@@ -16,23 +19,22 @@
                         });
 
                         function actualiza(){
-                                vanyo=$( "#desdeanyo").val();
-                                vmes=$( "#desdemes").val();
-                                vdia=$( "#desdedia").val();
+                                desdefecha=$( "#desdefecha").val();
+                                var res = desdefecha.split("/");
+                                vanyo=res[2];
+                                vmes=res[1];
+                                vdia=res[0];
                                 refresca(vanyo,vmes,vdia);
                         }
                 </script>
                 {% endblock %}
 {% block title %}{{ GRAPPELLI_ADMIN_TITLE }}{% endblock %}
                 {% block main %}
-
-<label>Año</label>
-<input id="desdeanyo" value="{{ hoy.year }}" maxlength="4" size="4">
-<label>Mes</label>
-<input id="desdemes"  value="{{ hoy.month }}" maxlength="4" size="4">
-<label>Dia</label>
-<input id="desdedia" value="{{ hoy.day }}" maxlength="4" size="4">
+<label>Fecha</label>
+<input size="16" type="text" readonly class="form_datetime" id="desdefecha">
 <button  onclick ="actualiza()">Buscar</button>
 <div id="container"></div>
-
+<script type="text/javascript">
+  $(".form_datetime").datetimepicker({format: 'dd/mm/yyyy', minView: 'month', maxView: 'month', language: 'es', autoclose: true, viewSelect: 'month'});
+</script>
 {% endblock %}

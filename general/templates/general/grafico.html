@@ -75,7 +75,9 @@
 		<script src="{% static "hc/modules/exporting.js" %}"></script>
 <label>Año</label>
 <select id="desdeanyo"  onchange="actualiza()">
-  <option value="2015">2015</option>
+        {% for anyo in anyos %}
+          <option value="{{ anyo }}">{{ anyo }}</option>
+        {% endfor %}
 </select>
 <label>Mes</label>
 <select id="desdemes" onchange="actualiza()">

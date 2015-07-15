@@ -61,9 +61,12 @@ def grafico(request):
 #    latest_recepcion_list = Recepcion.objects.all()
     template = loader.get_template('general/grafico.html')
     listames = range(1,13)
+    i = datetime.datetime.now()
+    anyos = range(2014,i.year+1)
     context = RequestContext(request, {
         'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE,
-        'listames': listames
+        'listames': listames,
+        'anyos': anyos
 #        'latest_recepcion_list': latest_recepcion_list,
     })
     return HttpResponse(template.render(context))
