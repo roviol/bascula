@@ -57,6 +57,8 @@ class Transaccion(models.Model):
     placa = models.CharField(max_length=20)
     observacion = models.CharField(max_length=255,  blank=True)
     conductor = models.CharField(max_length=50)
+    llega = models.DateTimeField(null=True, blank=True, default=datetime.datetime.now)
+    sale = models.DateTimeField(null=True, blank=True, default=datetime.datetime.now)
     def __unicode__(self):  
         return self.ubicacion.nombre + ' ' + self.fecha.strftime('%Y-%m-%d') + ' ' + str(self.neto)
     def listo(self):

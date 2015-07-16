@@ -5,6 +5,9 @@
 {% block adminurl %}<a href='{% url 'admin:index' %}'>Administrativo</a>{% endblock %}
 	{% block scriptjson %}
 		<script type="text/javascript" src="{% static "fullcalendar/lib/jquery.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "datetimepicker/js/bootstrap-datetimepicker.js" %}"></script>
+        <script type="text/javascript" src="{% static "datetimepicker/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
+        <link rel="stylesheet" href="{% static "datetimepicker/css/bootstrap-datetimepicker.css" %}">
 		<script type="text/javascript">
 
 		function refresca(panyo, pmes){
@@ -62,8 +65,10 @@
 			});
 
 			function actualiza(){
-				vanyo=$( "#desdeanyo option:selected")[0].value;
-				vmes=$( "#desdemes option:selected")[0].value;
+                desdefecha=$( "#desde").val();
+                var res = desdefecha.split("/");
+                vanyo=res[0];
+                vmes=res[1];
 				refresca(vanyo,vmes);
 
 			}
@@ -73,17 +78,12 @@
 		{% block main %}
 		<script src="{% static "hc/highcharts.js" %}"></script>
 		<script src="{% static "hc/modules/exporting.js" %}"></script>
-<label>Año</label>
-<select id="desdeanyo"  onchange="actualiza()">
-        {% for anyo in anyos %}
-          <option value="{{ anyo }}">{{ anyo }}</option>
-        {% endfor %}
-</select>
-<label>Mes</label>
-<select id="desdemes" onchange="actualiza()">
-        {% for mesn in listames %}
-          <option value="{{ mesn }}">{{ mesn }}</option>
-        {% endfor %}
-</select>
+
+<label>Fecha</label>
+<input size="16" type="text" readonly class="form_datetime" id="desde">
+<button  onclick ="actualiza()">Buscar</button>
 		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<script type="text/javascript">
+  $(".form_datetime").datetimepicker({format: 'yyyy/mm', startView: 'year', minView: 'year', maxView: 'year', language: 'es', autoclose: true, viewSelect: 'year'});
+</script>
 		{% endblock %}
