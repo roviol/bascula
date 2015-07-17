@@ -12,6 +12,7 @@ from reportlab.platypus import Image
 from django.conf import settings
 import urllib
 from decimal import Decimal
+import datetime
 
 def export_as_json(request, arrime_id):
     queryset = Recepcion.objects.filter(pk=arrime_id)
@@ -34,7 +35,7 @@ def bruto(request, arrime_id):
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
     queryset.bruto=vserial
-    queryset.sale=datetime.now()
+    queryset.sale=datetime.datetime.now()
     queryset.neto=netoact(queryset.bruto,queryset.tara)
     queryset.save()
     response = HttpResponse(queryset.neto)
@@ -47,7 +48,7 @@ def tara(request, arrime_id):
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
     queryset.tara=vserial
-    queryset.llega=datetime.now()
+    queryset.llega=datetime.datetime.now()
     queryset.neto=netoact(queryset.bruto,queryset.tara)
     queryset.save()
     response = HttpResponse(queryset.neto)
