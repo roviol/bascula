@@ -187,14 +187,16 @@ def resumenrep(request):
     select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
     categorias=[]
     for bascula in basculas:
+        sumtotal=0
         recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).extra(select=select_data).values('d','proveedor__nombre').annotate(netosum = Sum('neto'),total = Count('id')).order_by("d","proveedor__nombre")
         recepcionesp = []
         for item in recepciones:
             #inicio=str(item['d'])
             #neto = str(item['netosum'])
             #recepcionesp.append([inicio, neto])
+            sumtotal=sumtotal+item['netosum']
             recepcionesp.append({'dia': item['d'], 'neto': item['netosum'], 'proveedor': item['proveedor__nombre']})
-        categorias.append({'name': bascula.nombre, 'data': recepcionesp})
+        categorias.append({'name': bascula.nombre, 'data': recepcionesp, 'sumtotal': sumtotal})
 
     template = loader.get_template('general/resumenrep.html')
     context = RequestContext(request, {

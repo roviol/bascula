@@ -36,7 +36,7 @@ def bruto(request, arrime_id):
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
     queryset.bruto=vserial
-    queryset.sale=datetime.datetime.now()
+    queryset.llega=datetime.datetime.now()
     queryset.neto=netoact(queryset.bruto,queryset.tara)
     queryset.save()
     response = HttpResponse(queryset.neto)
@@ -49,7 +49,7 @@ def tara(request, arrime_id):
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
     queryset.tara=vserial
-    queryset.llega=datetime.datetime.now()
+    queryset.sale=datetime.datetime.now()
     queryset.neto=netoact(queryset.bruto,queryset.tara)
     queryset.save()
     response = HttpResponse(queryset.neto)
@@ -104,10 +104,10 @@ def reportearrime(request, arrime_id):
         p.drawString(140, 650-inicia, str(queryset[0].proveedor))
         p.drawString(50, 630-inicia, "Transportista: ")
         p.drawString(140, 630-inicia, str(queryset[0].transportista))
-        p.drawString(50, 610-inicia, "Observacion: ")
-        p.drawString(140, 610-inicia, str(queryset[0].observacion))
-        p.drawString(50, 590-inicia, "Placa: ")
-        p.drawString(140, 590-inicia, str(queryset[0].placa))
+        p.drawString(50, 610-inicia, "Placa: ")
+        p.drawString(140, 610-inicia, str(queryset[0].placa))
+        p.drawString(50, 590-inicia, "Observacion: ")
+        p.drawString(140, 590-inicia, str(queryset[0].observacion))
         #Cantidades
         #margen pesos
         margenpeso=70
@@ -122,6 +122,14 @@ def reportearrime(request, arrime_id):
         p.setFont("Helvetica-Bold", 24)
         p.drawString(300+margenpeso, 500-inicia, "Neto: ")
         p.drawString(380+margenpeso, 500-inicia, str(queryset[0].neto))
+        #
+        p.setFont("Helvetica-Bold", 8)
+        if (queryset[0].llega!=None):
+            p.drawString(50+margenpeso, 480-inicia, "Toma peso bruto: ")
+            p.drawString(140+margenpeso, 480-inicia, str(queryset[0].llega.strftime("%d/%m/%Y %I:%M %p")))
+        if (queryset[0].sale!=None):
+            p.drawString(280+margenpeso, 480-inicia, "Toma peso tara: ")
+            p.drawString(350+margenpeso, 480-inicia, str(queryset[0].sale.strftime("%d/%m/%Y %I:%M %p")))
         inicia=inicia+400
 
       
