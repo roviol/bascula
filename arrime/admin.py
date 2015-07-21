@@ -74,7 +74,7 @@ class RecepcionAdmin(admin.ModelAdmin):
     }
     list_display = ('ubicacion', 'producto','proveedor','fecha','linkbruto','linktara', 'neto',
                     'listo', 'linkreporte')
-    list_filter = ('ubicacion__nombre','producto__nombre')
+    list_filter = ('ubicacion__nombre','producto__nombre','fecha')
     search_fields = ['proveedor__nombre']
 
     def get_readonly_fields(self, request, obj=None):

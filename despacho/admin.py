@@ -64,7 +64,8 @@ class DespachoAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['ubicacion', 'producto', 'cliente', 'transportista', 'fecha']}),
         ('Vehiculo', {'fields': ['placa', 'conductor', ]}),
-        ('despacho', {'fields': ['bruto', 'tara', 'neto' ]}),
+        ('Despacho', {'fields': ['bruto', 'tara', 'neto' ]}),
+        ('Observacion', {'fields': ['observacion', ]}),
     ]
     raw_id_fields = ('cliente','transportista')
     readonly_fields = ('linkreporte','neto','bruto','tara','linkbruto','linktara')

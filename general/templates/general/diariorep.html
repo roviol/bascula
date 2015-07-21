@@ -15,7 +15,7 @@
 				<td>{{ recepcion.ubicacion }} </td>
 				<td>{{ recepcion.proveedor.nombre }} </td>
 				<td> {{ recepcion.fecha|date:"Y/m/d g:i a"|lower }} </td>
-				<td style="text-align: right"> {{ recepcion.neto }} </td>
+				<td style="text-align: right"> {{ recepcion.neto|default_if_none:'' }} </td>
 			</tr>
 			{% endfor %}
 			<tr>

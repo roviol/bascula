@@ -140,8 +140,11 @@ def diariorep(request):
         listarecep=[]
         for item in recepciones:
             listarecep.append(item)
-            suma=suma+item.neto
-            sumab=sumab+item.neto
+            netoe = item.neto
+            if netoe == None:
+                netoe = 0
+            suma=suma+netoe
+            sumab=sumab+netoe
         print(listarecep)
         basculasret.append({'bascula': bascula, 'recepciones': listarecep, 'suma': sumab})
 

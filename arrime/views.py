@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.core import serializers
 from reportlab.pdfgen import canvas
@@ -93,6 +94,7 @@ def reportearrime(request, arrime_id):
         p.setFont("Helvetica-Bold", 24)
         p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
         p.setFont("Helvetica-Bold", 15)
+        p.drawString(400,800-inicia, "Recepción")
         p.drawString(400,784-inicia, queryset[0].fecha.strftime("%d/%m/%Y %I:%M %p"))
         p.setFont("Helvetica-Bold", 15)
         p.drawString(200,684-inicia, str(queryset[0].ubicacion))
