@@ -170,6 +170,19 @@ def resumen(request):
     })
     return HttpResponse(template.render(context))
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
+def resumenp(request):
+    hoy=datetime.datetime.now()
+#    latest_recepcion_list = Recepcion.objects.all()
+    template = loader.get_template('general/resumenp.html')
+    context = RequestContext(request, {
+        'hoy': hoy,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+#        'latest_recepcion_list': latest_recepcion_list,
+    })
+    return HttpResponse(template.render(context))
+
+
 def resumenrep(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
@@ -196,6 +209,42 @@ def resumenrep(request):
             #recepcionesp.append([inicio, neto])
             sumtotal=sumtotal+item['netosum']
             recepcionesp.append({'dia': item['d'], 'neto': item['netosum'], 'proveedor': item['proveedor__nombre']})
+        categorias.append({'name': bascula.nombre, 'data': recepcionesp, 'sumtotal': sumtotal})
+
+    template = loader.get_template('general/resumenrep.html')
+    context = RequestContext(request, {
+        'categorias': categorias,
+#         'latest_despacho_list': latest_despacho_list,
+        'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+    })
+    return HttpResponse(template.render(context))
+
+def resumenreppr(request):
+    vanyo = int(request.GET["anyo"])
+    vmes = int(request.GET["mes"])
+    vdia = int(request.GET["dia"])
+    vhora = int(request.GET["hora"])
+    vanyoh = int(request.GET["anyoh"])
+    vmesh = int(request.GET["mesh"])
+    vdiah = int(request.GET["diah"])
+    vhorah = int(request.GET["horah"])
+    #vdia = int(request.GET["dia"])
+    desde = datetime.datetime(vanyo,vmes,vdia, vhora)
+    hasta = datetime.datetime(vanyoh,vmesh,vdiah, vhorah)
+    #hasta = add_months(desde,1)
+    basculas = Bascula.objects.all()
+    #select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
+    categorias=[]
+    for bascula in basculas:
+        sumtotal=0
+        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).values('proveedor__nombre').annotate(netosum = Sum('neto'),total = Count('id')).order_by("proveedor__nombre")
+        recepcionesp = []
+        for item in recepciones:
+            #inicio=str(item['d'])
+            #neto = str(item['netosum'])
+            #recepcionesp.append([inicio, neto])
+            sumtotal=sumtotal+item['netosum']
+            recepcionesp.append({ 'neto': item['netosum'], 'proveedor': item['proveedor__nombre']})
         categorias.append({'name': bascula.nombre, 'data': recepcionesp, 'sumtotal': sumtotal})
 
     template = loader.get_template('general/resumenrep.html')
