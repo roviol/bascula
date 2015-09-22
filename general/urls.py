@@ -10,6 +10,8 @@ urlpatterns = patterns('',
     url(r'^diario$', views.diario, name='diario'),
     url(r'^diariorep$', views.diariorep, name='diariorep'),
     url(r'^resumen$', views.resumen, name='resumen'),
-    url(r'^resumenrep$', views.resumenrep, name='resumenrep')
+    url(r'^resumenp$', views.resumenp, name='resumenp'),
+    url(r'^resumenrep$', views.resumenrep, name='resumenrep'),
+    url(r'^resumenreppr$', views.resumenreppr, name='resumenreppr')
 )
 
