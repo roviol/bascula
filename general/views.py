@@ -237,14 +237,15 @@ def resumenreppr(request):
     categorias=[]
     for bascula in basculas:
         sumtotal=0
-        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).values('proveedor__nombre').annotate(netosum = Sum('neto'),total = Count('id')).order_by("proveedor__nombre")
+        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(netosum = Sum('neto'),total = Count('id')).order_by("proveedor__nombre")
         recepcionesp = []
         for item in recepciones:
             #inicio=str(item['d'])
             #neto = str(item['netosum'])
             #recepcionesp.append([inicio, neto])
+            recepdet = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id,proveedor__id=item['proveedor__id']).exclude(neto__isnull=True).order_by("fecha")
             sumtotal=sumtotal+item['netosum']
-            recepcionesp.append({ 'neto': item['netosum'], 'proveedor': item['proveedor__nombre']})
+            recepcionesp.append({ 'neto': item['netosum'], 'proveedor': item['proveedor__nombre'],'detalle': recepdet})
         categorias.append({'name': bascula.nombre, 'data': recepcionesp, 'sumtotal': sumtotal})
 
     template = loader.get_template('general/resumenrep.html')

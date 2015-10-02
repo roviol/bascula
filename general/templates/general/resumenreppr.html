@@ -16,6 +16,13 @@
 				<td>{{ recepcion.proveedor }} </td>
 				<td style="text-align: right"> {{ recepcion.neto }} </td>
 			</tr>
+				{% for recepdet in recepcion.detalle %}
+				<tr>
+					<td>{{ recepdet.fecha }} </td>
+					<td>{{ recepdet.id }} </td>
+					<td style="text-align: right"> {{ recepdet.neto }} </td>
+				</tr>
+				{% endfor %}
 			{% endfor %}
 			<tr>
 				<td colspan="2"  style="text-align: right">Total </td>
