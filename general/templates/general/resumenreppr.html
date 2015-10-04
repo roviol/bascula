@@ -8,24 +8,33 @@
 	<div class="col-md-1"></div>
 	<div class="col-md-8">
 		{% for recepciones in categorias %}
+		<h2>{{ recepciones.name }}</h2>
 		<table class="table table-striped table-condensed">
-		{{ recepciones.name }}
 			{% for recepcion in recepciones.data %}
+			<thead>
 			<tr>
-				<td>{{ recepcion.dia }} </td>
-				<td>{{ recepcion.proveedor }} </td>
-				<td style="text-align: right"> {{ recepcion.neto }} </td>
+				<th colspan="4">{{ recepcion.proveedor }} </th>
+				<th style="text-align: right"> {{ recepcion.neto }} </th>
 			</tr>
+			</thead>
+			<tbody>
 				{% for recepdet in recepcion.detalle %}
 				<tr>
-					<td>{{ recepdet.fecha }} </td>
+					<td> &nbsp; </td>
+					<td>{{ recepdet.d }} </td>
 					<td>{{ recepdet.id }} </td>
+					<td>{{ recepdet.conductor }} ({{ recepdet.placa }})</td>
 					<td style="text-align: right"> {{ recepdet.neto }} </td>
 				</tr>
 				{% endfor %}
+				<tr>
+				<td  colspan="5"> &nbsp; </td>
+				</tr>
+			</tbody>
 			{% endfor %}
 			<tr>
-				<td colspan="2"  style="text-align: right">Total </td>
+				<td> &nbsp; </td>
+				<td colspan="3"  style="text-align: right">Total </td>
 				<td style="text-align: right"> {{ recepciones.sumtotal }} </td>
 			</tr>
 		</table>
