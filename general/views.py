@@ -244,6 +244,7 @@ def resumenreppr(request):
             #neto = str(item['netosum'])
             #recepcionesp.append([inicio, neto])
             recepdet = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id,proveedor__id=item['proveedor__id']).exclude(neto__isnull=True).order_by("fecha")
+            print recepdet
             sumtotal=sumtotal+item['netosum']
             recepcionesp.append({ 'neto': item['netosum'], 'proveedor': item['proveedor__nombre'],'detalle': recepdet})
         categorias.append({'name': bascula.nombre, 'data': recepcionesp, 'sumtotal': sumtotal})
