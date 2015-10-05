@@ -233,7 +233,7 @@ def resumenreppr(request):
     hasta = datetime.datetime(vanyoh,vmesh,vdiah, vhorah)
     #hasta = add_months(desde,1)
     basculas = Bascula.objects.all()
-    #select_data = {"d": """DATE_FORMAT(fecha, '%%Y-%%m-%%d')"""}
+    select_data = {"d": """DATE_FORMAT(fecha, '%%d/%%m/%%Y %%H:%%i')"""}
     categorias=[]
     for bascula in basculas:
         sumtotal=0
@@ -243,13 +243,12 @@ def resumenreppr(request):
             #inicio=str(item['d'])
             #neto = str(item['netosum'])
             #recepcionesp.append([inicio, neto])
-            recepdet = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id,proveedor__id=item['proveedor__id']).exclude(neto__isnull=True).order_by("fecha")
-            print recepdet
+            recepdet = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id,proveedor__id=item['proveedor__id']).exclude(neto__isnull=True).extra(select=select_data).order_by("fecha")
             sumtotal=sumtotal+item['netosum']
             recepcionesp.append({ 'neto': item['netosum'], 'proveedor': item['proveedor__nombre'],'detalle': recepdet})
         categorias.append({'name': bascula.nombre, 'data': recepcionesp, 'sumtotal': sumtotal})
 
-    template = loader.get_template('general/resumenrep.html')
+    template = loader.get_template('general/resumenreppr.html')
     context = RequestContext(request, {
         'categorias': categorias,
 #         'latest_despacho_list': latest_despacho_list,
