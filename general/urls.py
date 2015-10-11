@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^resumen$', views.resumen, name='resumen'),
     url(r'^resumenp$', views.resumenp, name='resumenp'),
     url(r'^resumenrep$', views.resumenrep, name='resumenrep'),
-    url(r'^resumenreppr$', views.resumenreppr, name='resumenreppr')
+    url(r'^resumenreppr$', views.resumenreppr, name='resumenreppr'),
+    url(r'^resumenrepprlist$', views.resumenrepprlist, name='resumenrepprlist')
 )
 

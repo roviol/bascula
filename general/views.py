@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response,redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from arrime.models import Recepcion
 from despacho.models import Despacho
+from general.models import Proveedor
 from general.models import Bascula
 from django.core import serializers
 from django.template import RequestContext, loader
@@ -174,9 +175,11 @@ def resumen(request):
 def resumenp(request):
     hoy=datetime.datetime.now()
 #    latest_recepcion_list = Recepcion.objects.all()
+    proveedores = Proveedor.objects.all()
     template = loader.get_template('general/resumenp.html')
     context = RequestContext(request, {
         'hoy': hoy,
+        'proveedores': proveedores,
         'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
 #        'latest_recepcion_list': latest_recepcion_list,
     })
@@ -232,12 +235,20 @@ def resumenreppr(request):
     desde = datetime.datetime(vanyo,vmes,vdia, vhora)
     hasta = datetime.datetime(vanyoh,vmesh,vdiah, vhorah)
     #hasta = add_months(desde,1)
+
+    vproductorid = int(request.GET["productorid"])
+
     basculas = Bascula.objects.all()
     select_data = {"d": """DATE_FORMAT(fecha, '%%d/%%m/%%Y %%H:%%i')"""}
     categorias=[]
+    productores = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(total = Count('id')).order_by("proveedor__nombre")
     for bascula in basculas:
         sumtotal=0
-        recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(netosum = Sum('neto'),total = Count('id')).order_by("proveedor__nombre")
+        recepciones=[]
+        if vproductorid == 0:
+            recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(netosum = Sum('neto'),total = Count('id')).order_by("proveedor__nombre")
+        else:
+            recepciones = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta,ubicacion__id=bascula.id,proveedor__id=vproductorid).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(netosum = Sum('neto'),total = Count('id')).order_by("proveedor__nombre")
         recepcionesp = []
         for item in recepciones:
             #inicio=str(item['d'])
@@ -253,6 +264,33 @@ def resumenreppr(request):
         'categorias': categorias,
 #         'latest_despacho_list': latest_despacho_list,
         'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
+    })
+    return HttpResponse(template.render(context))
+
+
+def resumenrepprlist(request):
+    vanyo = int(request.GET["anyo"])
+    vmes = int(request.GET["mes"])
+    vdia = int(request.GET["dia"])
+    vhora = int(request.GET["hora"])
+    vanyoh = int(request.GET["anyoh"])
+    vmesh = int(request.GET["mesh"])
+    vdiah = int(request.GET["diah"])
+    vhorah = int(request.GET["horah"])
+    vproductorid = int(request.GET["productorid"])
+    #vdia = int(request.GET["dia"])
+    desde = datetime.datetime(vanyo,vmes,vdia, vhora)
+    hasta = datetime.datetime(vanyoh,vmesh,vdiah, vhorah)
+    #hasta = add_months(desde,1)
+    basculas = Bascula.objects.all()
+    select_data = {"d": """DATE_FORMAT(fecha, '%%d/%%m/%%Y %%H:%%i')"""}
+    categorias=[]
+    productores = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(total = Count('id')).order_by("proveedor__nombre")
+    print productores
+    template = loader.get_template('general/resumenrepprlist.html')
+    context = RequestContext(request, {
+        'productorid': vproductorid,
+        'productores': productores,
     })
     return HttpResponse(template.render(context))
 

@@ -1,0 +1,5 @@
+
+     <option value="0">Todos</option>
+  {% for proveedor in productores %}
+     <option value="{{ proveedor.proveedor__id }}" {% if proveedor.proveedor__id == productorid %} selected {% endif %}>{{ proveedor.proveedor__nombre }}</option>
+  {% endfor %}

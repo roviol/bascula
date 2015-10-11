@@ -10,8 +10,9 @@
                 <link rel="stylesheet" href="{% static "datetimepicker/css/bootstrap-datetimepicker.css" %}">
                 <script type="text/javascript">
 
-                function refresca(panyo, pmes, pdia, phora, panyoh, pmesh, pdiah, phorah){
-                        $('#container').load("{% url 'resumenreppr' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia+"&hora="+phora+"&anyoh="+panyoh+"&mesh="+pmesh+"&diah="+pdiah+"&horah="+phorah);
+                function refresca(panyo, pmes, pdia, phora, panyoh, pmesh, pdiah, phorah,productorid){
+                        $('#container').load("{% url 'resumenreppr' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia+"&hora="+phora+"&anyoh="+panyoh+"&mesh="+pmesh+"&diah="+pdiah+"&horah="+phorah+"&productorid="+productorid);
+                        $('#productoreslist').load("{% url 'resumenrepprlist' %}?anyo="+panyo+"&mes="+pmes+"&dia="+pdia+"&hora="+phora+"&anyoh="+panyoh+"&mesh="+pmesh+"&diah="+pdiah+"&horah="+phorah+"&productorid="+productorid);
                         }
 
                         $(function() {
@@ -33,7 +34,8 @@
                                 vmesh=resh[1];
                                 vdiah=resh[0];
                                 vhorah=resih[1];
-                                refresca(vanyo,vmes,vdia,vhora,vanyoh,vmesh,vdiah,vhorah);
+                                productorid=$( "#productoreslist").val();
+                                refresca(vanyo,vmes,vdia,vhora,vanyoh,vmesh,vdiah,vhorah,productorid);
                         }
                 </script>
                 {% endblock %}
@@ -44,6 +46,12 @@
 <input size="16" type="text" readonly class="form_datetime" id="desdefecha">
 <label>Hasta</label>
 <input size="16" type="text" readonly class="form_datetime" id="hastafecha">
+<select id="productoreslist">
+     <option value="0">Todos</option>
+  {% for proveedor in proveedores %}
+     <option value="{{ proveedor.id }}">{{ proveedor.nombre }}</option>
+  {% endfor %}
+</select>
 <button  onclick ="actualiza()">Buscar</button>
 <div id="container"></div>
 <script type="text/javascript">
