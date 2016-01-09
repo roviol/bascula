@@ -74,6 +74,7 @@ def reportearrime(request, arrime_id):
         #Ticket
         p.setFont("Helvetica-Bold", 14)
         p.drawString(350,730-inicia, 'Ticket:')
+        p.drawString(350,750-inicia, str(queryset[0].producto))
         p.setFont("Helvetica-Bold", 14)
         p.drawString(450,730-inicia, str(queryset[0].id))
         #barcode=code39.Extended39(str(queryset[0].id),barWidth=0.5*mm,barHeight=5*mm)
@@ -108,6 +109,7 @@ def reportearrime(request, arrime_id):
         p.drawString(140, 630-inicia, str(queryset[0].transportista))
         p.drawString(50, 610-inicia, "Placa: ")
         p.drawString(140, 610-inicia, str(queryset[0].placa))
+        p.drawString(240, 610-inicia, str(queryset[0].conductor))
         p.drawString(50, 590-inicia, "Observacion: ")
         p.drawString(140, 590-inicia, str(queryset[0].observacion))
         #Cantidades
