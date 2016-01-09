@@ -105,7 +105,7 @@ def reportedespacho(request, despacho_id):
         p.drawString(140, 630-inicia, str(queryset[0].transportista))
         p.drawString(50, 610-inicia, "Placa: ")
         p.drawString(140, 610-inicia, str(queryset[0].placa))
-        p.drawString(240, 610-inicia, str(queryset[0].conductor))
+        p.drawString(340, 610-inicia, str(queryset[0].conductor))
         p.drawString(50, 590-inicia, "Observacion: ")
         p.drawString(140, 590-inicia, str(queryset[0].observacion))
         #Cantidades
