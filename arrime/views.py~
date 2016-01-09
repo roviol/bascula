@@ -35,8 +35,7 @@ def bruto(request, arrime_id):
     urlserial=queryset.ubicacion.urlserial
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
-    #queryset.bruto=vserial
-    queryset.bruto=str(vserial).replace('kg','')
+    queryset.bruto=vserial
     queryset.llega=datetime.datetime.now()
     queryset.neto=netoact(queryset.bruto,queryset.tara)
     queryset.save()
@@ -49,8 +48,7 @@ def tara(request, arrime_id):
     urlserial=queryset.ubicacion.urlserial
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
-    #queryset.tara=vserial
-    queryset.tara=str(vserial).replace('kg','')
+    queryset.tara=vserial
     queryset.sale=datetime.datetime.now()
     queryset.neto=netoact(queryset.bruto,queryset.tara)
     queryset.save()
