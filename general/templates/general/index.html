@@ -8,7 +8,7 @@
 {% block main %}
 <div class="row">
 	<div class="col-md-1"></div>
-	<div class="col-md-8">
+	<div class="col-md-10">
 		<h3>Recepciones recientes</h3>
 		<table class="table table-striped table-condensed">
 			{% for recepcion in latest_recepcion_list %}
@@ -16,7 +16,27 @@
 				<td>{{ recepcion.ubicacion }} </td>
 				<td>{{ recepcion.proveedor.nombre }} </td>
 				<td> {{ recepcion.fecha }} </td>
+				<td>{{ recepcion.producto }} </td>
 				<td style="text-align: right"> {{ recepcion.neto }} </td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<div class="col-md-1"></div>
+</div>
+
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		<h3>Despachos recientes</h3>
+		<table class="table table-striped table-condensed">
+			{% for despacho in latest_despacho_list %}
+			<tr>
+				<td>{{ despacho.ubicacion }} </td>
+				<td>{{ despacho.proveedor.nombre }} </td>
+				<td> {{ despacho.fecha }} </td>
+				<td>{{ despacho.producto }} </td>
+				<td style="text-align: right"> {{ despacho.neto }} </td>
 			</tr>
 			{% endfor %}
 		</table>

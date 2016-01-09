@@ -94,7 +94,7 @@ TIME_ZONE = 'America/Caracas'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/bascula/static/'
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -124,4 +124,4 @@ GRAPPELLI_AUTOCOMPLETE_SEARCH_FIELDS = {
     }
 }
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'))
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)

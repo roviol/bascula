@@ -21,10 +21,11 @@ import calendar
 def index(request):
 #     latest_despacho_list = Despacho.objects.all()
     latest_recepcion_list = Recepcion.objects.order_by('-fecha')[0:10]
+    latest_despacho_list = Despacho.objects.order_by('-fecha')[0:10]
     template = loader.get_template('general/index.html')
     context = RequestContext(request, {
         'latest_recepcion_list': latest_recepcion_list,
-#         'latest_despacho_list': latest_despacho_list,
+        'latest_despacho_list': latest_despacho_list,
         'GRAPPELLI_ADMIN_TITLE': settings.GRAPPELLI_ADMIN_TITLE
     })
     return HttpResponse(template.render(context))
