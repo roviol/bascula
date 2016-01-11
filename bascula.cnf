@@ -4,3 +4,4 @@ database = bascula
 user = bascula
 password = bascula
 default-character-set = utf8
+#host = racoya.com
