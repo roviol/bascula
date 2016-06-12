@@ -96,7 +96,8 @@ def reportedespacho(request, despacho_id):
         p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
         p.setFont("Helvetica-Bold", 15)
         p.drawString(400,800-inicia, "Despacho")
-        p.drawString(400,784-inicia, queryset[0].fecha.strftime("%d/%m/%Y %I:%M %p"))
+        #p.drawString(400,784-inicia, queryset[0].fecha.strftime("%d/%m/%Y %I:%M %p"))
+        p.drawString(400,784-inicia, queryset[0].fechastr())
         p.setFont("Helvetica-Bold", 15)
         p.drawString(200,684-inicia, str(queryset[0].ubicacion))
         #Productor y Transporte

@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.utils import timezone
 
 class Empresa(models.Model):
     nombre = models.CharField(max_length=150)
@@ -66,6 +67,9 @@ class Transaccion(models.Model):
     listo.admin_order_field = 'neto'
     listo.boolean = True
     listo.short_description = 'Completa?'
+    def fechastr(self):
+        class_date = timezone.localtime(self.fecha)
+        return class_date.strftime("%d/%m/%Y %I:%M %p")
 
 class Proceso(models.Model):
     nombre = models.CharField(max_length=100)
