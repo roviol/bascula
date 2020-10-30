@@ -70,12 +70,6 @@ class Transaccion(models.Model):
     def fechastr(self):
         class_date = timezone.localtime(self.fecha)
         return class_date.strftime("%d/%m/%Y %I:%M %p")
-    def llegastr(self):
-        class_date = timezone.localtime(self.llega)
-        return class_date.strftime("%d/%m/%Y %I:%M %p")
-    def salestr(self):
-        class_date = timezone.localtime(self.sale)
-        return class_date.strftime("%d/%m/%Y %I:%M %p")
 
 class Proceso(models.Model):
     nombre = models.CharField(max_length=100)

@@ -129,10 +129,10 @@ def reportedespacho(request, despacho_id):
         p.setFont("Helvetica-Bold", 8)
         if (queryset[0].llega!=None):
             p.drawString(50+margenpeso, 480-inicia, "Toma peso bruto: ")
-            p.drawString(140+margenpeso, 480-inicia, str(queryset[0].llega.strftime("%d/%m/%Y %I:%M %p")))
+            p.drawString(140+margenpeso, 480-inicia, str(queryset[0].llegastr()))
         if (queryset[0].sale!=None):
             p.drawString(280+margenpeso, 480-inicia, "Toma peso tara: ")
-            p.drawString(350+margenpeso, 480-inicia, str(queryset[0].sale.strftime("%d/%m/%Y %I:%M %p")))
+            p.drawString(350+margenpeso, 480-inicia, str(queryset[0].salestr()))
         inicia=inicia+400
 
       

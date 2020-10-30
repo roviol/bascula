@@ -2,21 +2,20 @@
 from django.http import HttpResponse
 from django.core import serializers
 from reportlab.pdfgen import canvas
-from arrime.models import Recepcion
+from despacho.models import Despacho
 from reportlab.lib.pagesizes import letter
 from reportlab.graphics.barcode import code39
 from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing 
 from reportlab.lib.units import mm
 from reportlab.graphics import renderPDF
-from reportlab.platypus import Image
 from django.conf import settings
 import urllib
 from decimal import Decimal
 import datetime
 
-def export_as_json(request, arrime_id):
-    queryset = Recepcion.objects.filter(pk=arrime_id)
+def export_as_json(request, despacho_id):
+    queryset = Despacho.objects.filter(pk=despacho_id)
     response = HttpResponse(content_type="application/json")
     serializers.serialize("json", queryset, stream=response)
     return response
@@ -30,8 +29,8 @@ def netoact(pbruto, ptara):
     except:
         return None
 
-def bruto(request, arrime_id):
-    queryset = Recepcion.objects.get(pk=arrime_id)
+def bruto(request, despacho_id):
+    queryset = Despacho.objects.get(pk=despacho_id)
     urlserial=queryset.ubicacion.urlserial
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
@@ -44,8 +43,8 @@ def bruto(request, arrime_id):
     return response
 
 
-def tara(request, arrime_id):
-    queryset = Recepcion.objects.get(pk=arrime_id)
+def tara(request, despacho_id):
+    queryset = Despacho.objects.get(pk=despacho_id)
     urlserial=queryset.ubicacion.urlserial
     valorserial=urllib.urlopen(urlserial)
     vserial=valorserial.read()
@@ -57,12 +56,11 @@ def tara(request, arrime_id):
     response = HttpResponse(queryset.neto)
     return response
 
-def reportearrime(request, arrime_id):    
-    #logo = Image("/home/roland/Documentos/bascula/general/static/imagenes/logo.jpg")
+def reportedespacho(request, despacho_id):
     logo = settings.STATIC_ROOT+"/imagenes/logo.jpg"
     print(logo)
     inicia=70;
-    queryset = Recepcion.objects.filter(pk=arrime_id)
+    queryset = Despacho.objects.filter(pk=despacho_id)
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'inline; filename="ticket.pdf"'
     response['Cache-Control'] = 'no-cache'
@@ -80,7 +78,7 @@ def reportearrime(request, arrime_id):
         #barcode=code39.Extended39(str(queryset[0].id),barWidth=0.5*mm,barHeight=5*mm)
         #barcode.drawOn(p,250,730)
         qrw = QrCodeWidget(str(queryset[0].id)+';'+
-                           str(queryset[0].proveedor)+';'
+                           str(queryset[0].cliente)+';'
                            +str(queryset[0].fecha)+';'
                            +str(queryset[0].neto)) 
         b = qrw.getBounds()
@@ -97,16 +95,15 @@ def reportearrime(request, arrime_id):
         p.setFont("Helvetica-Bold", 24)
         p.drawString(50,700-inicia, settings.GRAPPELLI_ADMIN_TITLE)
         p.setFont("Helvetica-Bold", 15)
-        p.drawString(400,800-inicia, "Recepción")
+        p.drawString(400,800-inicia, "Despacho")
         #p.drawString(400,784-inicia, queryset[0].fecha.strftime("%d/%m/%Y %I:%M %p"))
         p.drawString(400,784-inicia, queryset[0].fechastr())
-        
         p.setFont("Helvetica-Bold", 15)
         p.drawString(200,684-inicia, str(queryset[0].ubicacion))
         #Productor y Transporte
         p.setFont("Helvetica-Bold", 12)
-        p.drawString(50, 650-inicia, "Productor: ")
-        p.drawString(140, 650-inicia, str(queryset[0].proveedor))
+        p.drawString(50, 650-inicia, "Cliente: ")
+        p.drawString(140, 650-inicia, str(queryset[0].cliente))
         p.drawString(50, 630-inicia, "Transportista: ")
         p.drawString(140, 630-inicia, str(queryset[0].transportista))
         p.drawString(50, 610-inicia, "Placa: ")
@@ -132,10 +129,10 @@ def reportearrime(request, arrime_id):
         p.setFont("Helvetica-Bold", 8)
         if (queryset[0].llega!=None):
             p.drawString(50+margenpeso, 480-inicia, "Toma peso bruto: ")
-            p.drawString(140+margenpeso, 480-inicia, str(queryset[0].llegastr()))
+            p.drawString(140+margenpeso, 480-inicia, str(queryset[0].llega.strftime("%d/%m/%Y %I:%M %p")))
         if (queryset[0].sale!=None):
             p.drawString(280+margenpeso, 480-inicia, "Toma peso tara: ")
-            p.drawString(350+margenpeso, 480-inicia, str(queryset[0].salestr()))
+            p.drawString(350+margenpeso, 480-inicia, str(queryset[0].sale.strftime("%d/%m/%Y %I:%M %p")))
         inicia=inicia+400
 
       

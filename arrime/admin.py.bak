@@ -54,10 +54,6 @@ class RecepcionAdmin(admin.ModelAdmin):
         else:
             texto=str(obj.tara)
         txttara = funciontxt+u'<a onclick="refrescatara'+str(obj.id)+'()" href="#">'+texto+'</a>'
-        if (obj.tara==None):
-            texto="...<-"
-        else:
-            txttara=str(obj.tara)
         ahora=datetime.datetime.utcnow().replace(tzinfo=utc)
         tiempo=ahora-obj.fecha
         tiemposegundos=tiempo.total_seconds()
