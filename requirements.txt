@@ -1,6 +1,6 @@
 Django==1.6.11
 django-grappelli==2.4.12
 mysqlclient==1.4.6
-Pillow==6.2.2
+Pillow==7.1.0
 pytz==2020.1
 reportlab==3.5.54
