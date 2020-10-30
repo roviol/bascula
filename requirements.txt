@@ -1,4 +1,4 @@
-Django==1.6.11
+Django==1.11.29
 django-grappelli==2.4.12
 mysqlclient==1.4.6
 Pillow==6.2.2
