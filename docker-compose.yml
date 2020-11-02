@@ -1,0 +1,11 @@
+version: '2'
+services:
+  bascula-app:
+    build: .
+    ports:
+      - 8000:8000
+  bascula-mysql:
+    extends:
+      file: docker/mysql.yml
+      service: bascula-mysql
+
