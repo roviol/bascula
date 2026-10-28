@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse_lazy
 from urlparse import urlparse
 from django.core import serializers
@@ -42,6 +43,7 @@ def netoact(pbruto, ptara):
     except:
         return None
 
+@require_POST
 @login_requerido
 def bruto(request, arrime_id):
     queryset = Recepcion.objects.get(pk=arrime_id)
@@ -59,6 +61,7 @@ def bruto(request, arrime_id):
     return response
 
 
+@require_POST
 @login_requerido
 def tara(request, arrime_id):
     queryset = Recepcion.objects.get(pk=arrime_id)

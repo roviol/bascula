@@ -9,7 +9,7 @@ services:
      volumes:
        - ./data:/docker-entrypoint-initdb.d
      environment:
-       MYSQL_ROOT_PASSWORD: bascula
+       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD}
        MYSQL_DATABASE: bascula
        MYSQL_USER: bascula
-       MYSQL_PASSWORD: bascula
+       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?defina MYSQL_PASSWORD}
