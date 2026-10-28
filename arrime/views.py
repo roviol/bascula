@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse_lazy
+from urlparse import urlparse
 from django.core import serializers
 from reportlab.pdfgen import canvas
 from arrime.models import Recepcion
@@ -15,11 +18,20 @@ import urllib
 from decimal import Decimal
 import datetime
 
+@login_requerido
 def export_as_json(request, arrime_id):
     queryset = Recepcion.objects.filter(pk=arrime_id)
     response = HttpResponse(content_type="application/json")
     serializers.serialize("json", queryset, stream=response)
     return response
+
+login_requerido = login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
+
+def leer_serial(urlserial):
+    # Solo http/https: urllib.urlopen tambien abre file:// y ftp://
+    if urlparse(urlserial or '').scheme not in ('http', 'https'):
+        raise ValueError('urlserial invalida')
+    return urllib.urlopen(urlserial).read()
 
 def netoact(pbruto, ptara):
     try:
@@ -30,11 +42,14 @@ def netoact(pbruto, ptara):
     except:
         return None
 
+@login_requerido
 def bruto(request, arrime_id):
     queryset = Recepcion.objects.get(pk=arrime_id)
     urlserial=queryset.ubicacion.urlserial
-    valorserial=urllib.urlopen(urlserial)
-    vserial=valorserial.read()
+    try:
+        vserial=leer_serial(urlserial)
+    except (ValueError, IOError):
+        return HttpResponseBadRequest('No se pudo leer la bascula')
     #queryset.bruto=vserial
     queryset.bruto=str(vserial).replace('kg','')
     queryset.llega=datetime.datetime.now()
@@ -44,11 +59,14 @@ def bruto(request, arrime_id):
     return response
 
 
+@login_requerido
 def tara(request, arrime_id):
     queryset = Recepcion.objects.get(pk=arrime_id)
     urlserial=queryset.ubicacion.urlserial
-    valorserial=urllib.urlopen(urlserial)
-    vserial=valorserial.read()
+    try:
+        vserial=leer_serial(urlserial)
+    except (ValueError, IOError):
+        return HttpResponseBadRequest('No se pudo leer la bascula')
     #queryset.tara=vserial
     queryset.tara=str(vserial).replace('kg','')
     queryset.sale=datetime.datetime.now()
@@ -57,10 +75,10 @@ def tara(request, arrime_id):
     response = HttpResponse(queryset.neto)
     return response
 
+@login_requerido
 def reportearrime(request, arrime_id):    
     #logo = Image("/home/roland/Documentos/bascula/general/static/imagenes/logo.jpg")
     logo = settings.STATIC_ROOT+"/imagenes/logo.jpg"
-    print(logo)
     inicia=70;
     queryset = Recepcion.objects.filter(pk=arrime_id)
     response = HttpResponse(content_type='application/pdf')
