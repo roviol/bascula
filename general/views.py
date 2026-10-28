@@ -13,6 +13,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.utils.http import is_safe_url
 from django.core.urlresolvers import reverse_lazy
 import datetime
 import calendar
@@ -34,14 +35,16 @@ def login_user(request):
     logout(request)
     username = password = ''
     if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
 
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
-                siguiente = request.POST.get('next', '/')
+                siguiente = request.POST.get('next', '')
+                if not is_safe_url(siguiente, host=request.get_host()):
+                    siguiente = '/'
                 return HttpResponseRedirect(siguiente)
     siguiente = request.GET.get('next', '')
     context = {'next':siguiente,
@@ -73,6 +76,7 @@ def grafico(request):
     })
     return HttpResponse(template.render(context))
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def recepciones(request):
     recepciones = Recepcion.objects.order_by('-fecha')
     recepcionesp = []
@@ -83,6 +87,7 @@ def recepciones(request):
     data = json.dumps(recepcionesp)
     return HttpResponse(data, content_type="application/json")
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def arrimeproveedor(request):
     recepciones = Recepcion.objects.values('proveedor__nombre','fecha').annotate(neto = Sum('neto'),total = Count('id')).order_by()
     recepcionesp = []
@@ -93,6 +98,7 @@ def arrimeproveedor(request):
     data = json.dumps(recepcionesp)
     return HttpResponse(data, content_type="application/json")
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def arrime(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
@@ -125,6 +131,7 @@ def diario(request):
     })
     return HttpResponse(template.render(context))
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def diariorep(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
@@ -147,7 +154,6 @@ def diariorep(request):
                 netoe = 0
             suma=suma+netoe
             sumab=sumab+netoe
-        print(listarecep)
         basculasret.append({'bascula': bascula, 'recepciones': listarecep, 'suma': sumab})
 
     template = loader.get_template('general/diariorep.html')
@@ -187,6 +193,7 @@ def resumenp(request):
     return HttpResponse(template.render(context))
 
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def resumenrep(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
@@ -223,6 +230,7 @@ def resumenrep(request):
     })
     return HttpResponse(template.render(context))
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def resumenreppr(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
@@ -269,6 +277,7 @@ def resumenreppr(request):
     return HttpResponse(template.render(context))
 
 
+@login_required(redirect_field_name='next', login_url=reverse_lazy('logingeneral'))
 def resumenrepprlist(request):
     vanyo = int(request.GET["anyo"])
     vmes = int(request.GET["mes"])
@@ -287,7 +296,6 @@ def resumenrepprlist(request):
     select_data = {"d": """DATE_FORMAT(fecha, '%%d/%%m/%%Y %%H:%%i')"""}
     categorias=[]
     productores = Recepcion.objects.filter(fecha__gt=desde,fecha__lt=hasta).exclude(neto__isnull=True).values('proveedor__nombre','proveedor__id').annotate(total = Count('id')).order_by("proveedor__nombre")
-    print productores
     template = loader.get_template('general/resumenrepprlist.html')
     context = RequestContext(request, {
         'productorid': vproductorid,

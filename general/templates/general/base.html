@@ -9,7 +9,6 @@
 		<script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
 		{% block scriptjson %} {% endblock %}
 	</head>
-	{% autoescape off %}
 	<body>
 	<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
 		<nav class="navbar navbar-default" role="navigation">
@@ -40,5 +39,4 @@
 				</div>
 			</div>
 	</body>
-	{% endautoescape %}
 </html>

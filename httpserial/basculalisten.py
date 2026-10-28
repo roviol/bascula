@@ -21,7 +21,10 @@ class SerialHandler(BaseHTTPServer.BaseHTTPRequestHandler):
          puerto=0
          envio=""
          if (linea.has_key("puerto")):
-             puerto=int(linea["puerto"][0]) 
+             puerto=int(linea["puerto"][0])
+             if puerto < 0 or puerto > 255:
+                 s.wfile.write('')
+                 return
          if (linea.has_key("envio")):
              envio=linea["envio"][0]
          lineaserial=""
@@ -51,7 +54,7 @@ if sys.argv[1:]:
     port = int(sys.argv[1])
 else:
     port = 8001
-server_address = ('0.0.0.0', port)
+server_address = (sys.argv[2] if len(sys.argv) > 2 else '127.0.0.1', port)
 
 HandlerClass.protocol_version = Protocol
 httpd = ServerClass(server_address, SerialHandler)

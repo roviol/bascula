@@ -1,7 +1,7 @@
-# my.cnf
+# Copie a bascula.cnf y complete (no lo versione)
 [client]
 database = bascula
 user = bascula
-password = bascula
+password = CAMBIAR
 default-character-set = utf8
 host = bascula-mysql
